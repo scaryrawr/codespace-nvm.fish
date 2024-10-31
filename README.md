@@ -11,3 +11,7 @@ Install with [Fisher](https://github.com/jorgebucaran/fisher):
 ```fish
 test -f "$NVM_DIR/nvm.sh" && fisher install jorgebucaran/replay.fish scaryrawr/codespace-nvm.fish
 ```
+
+## Acknowledgements
+
+Modified completions from [jorgebucaran/nvm.fish](https://github.com/jorgebucaran/nvm.fish/blob/a0892d0bb2304162d5faff561f030bb418cac34d/completions/nvm.fish) with additional completion inspiration from [FabioAntunes/fish-nvm](https://github.com/FabioAntunes/fish-nvm/blob/master/completions/nvm.fish).
