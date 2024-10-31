@@ -12,4 +12,5 @@ function load_nvm --on-variable="PWD"
     else if test "$node_version" != "$default_node_version"
         nvm use default
     end
+    set -gx PATH $NVM_BIN $PATH
 end
