@@ -3,11 +3,21 @@ function load_nvm --on-variable="PWD"
     set -l node_version (nvm version)
     set -l nvmrc_path (nvm_find_nvmrc)
     if test -n "$nvmrc_path"
-        set -l nvmrc_node_version (nvm version (cat $nvmrc_path))
+        set -l nvmrc_content (cat $nvmrc_path)
+        set -l nvmrc_node_version (nvm version $nvmrc_content)
         if test "$nvmrc_node_version" = N/A
-            nvm install (cat $nvmrc_path)
+            nvm install $nvmrc_content
         else if test "$nvmrc_node_version" != "$node_version"
-            nvm use $nvmrc_node_version
+            # Check if current version satisfies the nvmrc spec
+            # This handles cases where .nvmrc contains partial versions like "v24"
+            # and we're already on a compatible version like "v24.0.0"
+            set -l version_pattern 'v[0-9]+\.[0-9]+\.[0-9]+'
+            set -l matching_versions (nvm ls $nvmrc_content 2>/dev/null | string match -r $version_pattern)
+            # Only switch if current version is not among the matching versions
+            if test -z "$matching_versions"; or not contains -- "$node_version" $matching_versions
+                # Use the spec from .nvmrc, not the resolved version, to let nvm handle version selection
+                nvm use $nvmrc_content
+            end
         end
     else if test "$node_version" != "$default_node_version"
         nvm use default
