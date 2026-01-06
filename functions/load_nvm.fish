@@ -13,12 +13,9 @@ function load_nvm --on-variable="PWD"
             # and we're already on a compatible version like "v24.0.0"
             set -l version_pattern 'v[0-9]+\.[0-9]+\.[0-9]+'
             set -l matching_versions (nvm ls $nvmrc_content 2>/dev/null | string match -r $version_pattern)
-            # Only switch if we found matching versions and current version is not among them
-            if test -n "$matching_versions"; and not contains -- "$node_version" $matching_versions
+            # Only switch if current version is not among the matching versions
+            if test -z "$matching_versions"; or not contains -- "$node_version" $matching_versions
                 # Use the spec from .nvmrc, not the resolved version, to let nvm handle version selection
-                nvm use $nvmrc_content
-            else if test -z "$matching_versions"
-                # If no matching versions found, let nvm use handle it (it will switch or error appropriately)
                 nvm use $nvmrc_content
             end
         end
