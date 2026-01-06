@@ -8,7 +8,9 @@ function load_nvm --on-variable="PWD"
         if test "$nvmrc_node_version" = N/A
             nvm install $nvmrc_content
         else if test "$nvmrc_node_version" != "$node_version"
-            # Check if current version satisfies the nvmrc spec by checking if it's in the list
+            # Check if current version satisfies the nvmrc spec
+            # This handles cases where .nvmrc contains partial versions like "v24"
+            # and we're already on a compatible version like "v24.0.0"
             set -l matching_versions (nvm ls $nvmrc_content 2>/dev/null)
             if not string match -q "*$node_version*" -- $matching_versions
                 nvm use $nvmrc_content
