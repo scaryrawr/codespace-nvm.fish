@@ -24,7 +24,7 @@ function load_nvm --on-variable="PWD"
     end
     if test -n "$NVM_BIN"
         set -l escaped_nvm_bin (string escape --style=regex -- "$NVM_BIN")
-        set -l path_without_nvm_bin (string match --invert --regex -- "^$escaped_nvm_bin\$" $PATH)
+        set -l path_without_nvm_bin (string match --invert --regex -- '^'$escaped_nvm_bin'$' $PATH)
         set -gx PATH $NVM_BIN $path_without_nvm_bin
     end
     __codespace_nvm_ensure_local_bin_first
