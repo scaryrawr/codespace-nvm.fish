@@ -23,11 +23,8 @@ function load_nvm --on-variable="PWD"
         nvm use default
     end
     if test -n "$NVM_BIN"
-        set -l path_without_nvm_bin
-        for path_entry in $PATH
-            test "$path_entry" = "$NVM_BIN"; and continue
-            set -a path_without_nvm_bin "$path_entry"
-        end
+        set -l escaped_nvm_bin (string escape --style=regex -- "$NVM_BIN")
+        set -l path_without_nvm_bin (string match --invert --regex -- "^$escaped_nvm_bin\$" $PATH)
         set -gx PATH $NVM_BIN $path_without_nvm_bin
     end
     __codespace_nvm_ensure_local_bin_first
